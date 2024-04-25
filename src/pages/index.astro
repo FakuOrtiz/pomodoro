@@ -1,14 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Minutes from "../components/Minutes";
 ---
 
 <Layout title="Pomodoro">
-  <h1 class="text-4xl font-semibold">POMODORO</h1>
-  <h2>Esto es un subtítulo</h2>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius sunt, quo
-    ipsum harum minima quas ullam maiores optio tenetur culpa impedit
-    reprehenderit fuga voluptatum aperiam fugit perferendis nesciunt nostrum
-    earum?
-  </p>
+  <h1 class="text-4xl font-semibold text-center">POMODORO</h1>
+  <section class="my-10">
+    <Minutes client:visible title="estudio" minutes={[15, 25, 30, 50]} />
+    <Minutes client:visible title="descanso" minutes={[5, 10, 15]} />
+  </section>
 </Layout>

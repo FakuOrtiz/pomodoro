@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
-import Sun from "../../public/img/Sun";
-import Moon from "../../public/img/Moon";
+import Sun from "../../../public/img/Sun";
+import Moon from "../../../public/img/Moon";
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState("dark");
@@ -8,7 +8,7 @@ const ThemeSwitcher = () => {
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
 
-    document.querySelector("body")?.setAttribute("data-theme", newTheme);
+    document.querySelector("html")?.setAttribute("data-theme", newTheme);
 
     setTheme(newTheme);
   };

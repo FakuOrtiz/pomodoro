@@ -1,6 +1,6 @@
 ---
 import { ViewTransitions } from "astro:transitions";
-import Header from "../components/Header.astro";
+import Header from "../components/(header)/Header.astro";
 
 interface Props {
   title: string;
@@ -10,7 +10,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Pomodoro app" />
@@ -24,24 +24,28 @@ const { title } = Astro.props;
     <title>{title}</title>
     <ViewTransitions />
   </head>
-  <body data-theme="dark" class="font-montse p-4">
+  <body  class="font-montse p-4 flex flex-col items-center">
     <Header />
-    <main>
+    <main class="p-4 flex flex-col items-center">
       <slot />
     </main>
   </body>
 </html>
 
-<style is:global define:vars={{ primary: "#0e273c",secondary: "#e7e6f7" }}>
-body[data-theme="light"] {
-  background-color: var(--secondary);
-  color: var(--primary);
-  transition: 0.1s;
+<style is:global>
+:root[data-theme="light"] {
+  --primary: #e7e6f7;
+  --secondary: #0e273c;
 }
 
-body[data-theme="dark"] {
-  background-color: var(--primary);
-  color: var(--accent);
-  transition: 0.1s;
+:root[data-theme="dark"] {
+  --primary: #0e273c;
+  --secondary: #e7e6f7;
 }
+
+body {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+
 </style>
