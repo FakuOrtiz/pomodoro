@@ -1,0 +1,47 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import Header from "../components/Header.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Pomodoro app" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <ViewTransitions />
+  </head>
+  <body data-theme="dark" class="font-montse p-4">
+    <Header />
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global define:vars={{ primary: "#0e273c",secondary: "#e7e6f7" }}>
+body[data-theme="light"] {
+  background-color: var(--secondary);
+  color: var(--primary);
+  transition: 0.1s;
+}
+
+body[data-theme="dark"] {
+  background-color: var(--primary);
+  color: var(--accent);
+  transition: 0.1s;
+}
+</style>
