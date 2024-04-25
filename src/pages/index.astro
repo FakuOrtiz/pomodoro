@@ -1,12 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Minutes from "../components/Minutes";
+import WrapperMinutes from "../components/(timer)/WrapperMinutes";
 ---
 
 <Layout title="Pomodoro">
-  <h1 class="text-4xl font-semibold text-center">POMODORO</h1>
-  <section class="my-10">
-    <Minutes client:visible title="estudio" minutes={[15, 25, 30, 50]} />
-    <Minutes client:visible title="descanso" minutes={[5, 10, 15]} />
-  </section>
+  <h1 class="text-4xl font-semibold text-center select-none">POMODORO</h1>
+  <WrapperMinutes client:visible />
 </Layout>

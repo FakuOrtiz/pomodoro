@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
-import Sun from "../../../public/img/Sun";
-import Moon from "../../../public/img/Moon";
+import Sun from "../../assets/Sun";
+import Moon from "../../assets/Moon";
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState("dark");

@@ -11,9 +11,9 @@ export default {
     extend: {
       fontFamily: {
         montse: ["Montserrat", "sans-serif"],
+        chivo: ["Chivo Mono", "monospace"],
       },
     },
   },
-  darkMode: "class",
   plugins: [],
 };
