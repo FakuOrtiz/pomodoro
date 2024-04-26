@@ -43,9 +43,12 @@ const WrapperMinutes = () => {
         <Timer
           studyTime={studyTime}
           breakTime={breakTime}
-          reps={reps}
-          setReps={setReps}
           isRunning={isRunning}
+          reps={reps}
+          setStudyTime={setStudyTime}
+          setBreakTime={setBreakTime}
+          setIsRunning={setIsRunning}
+          setReps={setReps}
         />
       </article>
     </section>

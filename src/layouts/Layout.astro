@@ -11,9 +11,38 @@ const { title } = Astro.props;
 <!doctype html>
 <html lang="es" data-theme="dark">
   <head>
+    <!--Meta Tags -->
     <meta charset="UTF-8" />
-    <meta name="description" content="Pomodoro app" />
+    <meta name="description" content="¡Controla tu tiempo de estudio y descanso!" />
+    <meta name="author" content="Facundo Ortiz" />
+    <meta name="publisher" content="Facundo Ortiz" />
     <meta name="viewport" content="width=device-width" />
+    <meta
+      name="keywords"
+      content="pomodoro, tomato, tomatoes, tomate, tomates, metodo, método, metodologia, metodología, estudio, estudiar, concentrarse, concentración, cronómetro, timer, chill, lofi, lo fi, chillout, chill out"
+    />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Chill Pomodoro App" />
+    <meta property="og:description" content="¡Controla tu tiempo de estudio y descanso!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Chill Pomodoro App" />
+    <meta property="og:url" content="https://chillpomodoro.vercel.app" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:image" content="/src/assets/opengraph.webp" />
+    <meta property="og:image:alt" content="Chill Pomodoro App" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content="1366" />
+    <meta property="og:image:height" content="768" />
+    <!-- Open Graph / Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@FakuOrtiz31" />
+    <meta name="twitter:creator" content="@FakuOrtiz31" />
+    <meta name="twitter:title" content="Chill Pomodoro App" />
+    <meta name="twitter:description" content="¡Controla tu tiempo de estudio y descanso!" />
+    <meta name="twitter:image" content="/src/assets/opengraph.webp" />
+    <meta name="twitter:image:alt" content="Chill Pomodoro App" />
+    <meta name="twitter:image:width" content="1366" />
+    <meta name="twitter:image:height" content="768" />
     <!--Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,6 +68,7 @@ const { title } = Astro.props;
       gtag("js", new Date());
       gtag("config", import.meta.env.GTAG);
     </script>
+    <link rel="icon" type="image/x-icon" href="/src/assets/favicon.ico" />
     <title>{title}</title>
   </head>
   <body class="font-montse p-4 flex flex-col items-center transition">
