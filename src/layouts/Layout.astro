@@ -1,5 +1,6 @@
 ---
 import Header from "../components/(header)/Header.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
   title: string;
@@ -68,14 +69,16 @@ const { title } = Astro.props;
       gtag("js", new Date());
       gtag("config", import.meta.env.GTAG);
     </script>
-    <link rel="icon" type="image/x-icon" href="/src/assets/favicon.ico" />
+    <!-- Favicon and Title -->
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>
   </head>
-  <body class="font-montse p-4 flex flex-col items-center transition">
+  <body class="font-montse p-4 flex flex-col items-center transition relative min-h-screen ">
     <Header />
-    <main class="flex flex-col items-center max-w-full">
+    <main class="flex flex-col items-center max-w-full pb-10">
       <slot />
     </main>
+    <Footer />
   </body>
 </html>
 
