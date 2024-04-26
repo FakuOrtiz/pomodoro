@@ -1,6 +1,8 @@
 import { useEffect, useState } from "preact/hooks";
 import Circle from "../../assets/Circle";
 import CircleFilled from "../../assets/CircleFilled";
+import alarm from "../../assets/alarm.mp3";
+import finish from "../../assets/finish.mp3";
 
 interface IProps {
   studyTime: number;
@@ -30,7 +32,7 @@ const Timer = (props: IProps) => {
     document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
 
     let minutes: string | number = studyTime;
-    let fullSeconds = minutes * 60; //Minutes to seconds
+    let fullSeconds = minutes * 60;
     let breakMinutes: string | number = breakTime;
     let repetitions = reps;
 
@@ -39,6 +41,10 @@ const Timer = (props: IProps) => {
       let seconds: string | number = fullSeconds % 60;
 
       fullSeconds--;
+
+      if (minutes === 0 && seconds === 3) {
+        new Audio(alarm).play();
+      }
 
       if (minutes === 0 && seconds === 0) {
         clearInterval(intervalID);
@@ -64,6 +70,7 @@ const Timer = (props: IProps) => {
         setCompletedReps(reps - repetitions);
         setReps(repetitions);
         if (repetitions === 0) {
+          new Audio(finish).play();
           return (document.getElementById("timeOf")!.innerHTML =
             "¡TERMINASTE TUS CICLOS DE ESTUDIO!");
         }
