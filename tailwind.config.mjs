@@ -10,8 +10,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        montse: ["Montserrat", "sans-serif"],
-        chivo: ["Chivo Mono", "monospace"],
+        montse: ["Montserrat Variable", "sans-serif"],
+        chivo: ["Chivo Mono Variable", "monospace"],
       },
     },
   },
