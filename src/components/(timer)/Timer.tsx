@@ -30,8 +30,7 @@ const Timer = (props: IProps) => {
     document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
 
     let minutes: string | number = studyTime;
-    // let fullSeconds = minutes * 60; //Minutes to seconds
-    let fullSeconds = 3; //Minutes to seconds
+    let fullSeconds = minutes * 60; //Minutes to seconds
     let breakMinutes: string | number = breakTime;
     let repetitions = reps;
 
@@ -57,8 +56,7 @@ const Timer = (props: IProps) => {
     const endCountdown = () => {
       if (breakMinutes) {
         minutes = breakTime;
-        // fullSeconds = minutes * 60;
-        fullSeconds = 3;
+        fullSeconds = minutes * 60;
         breakMinutes = 0;
         initializeInterval("break");
       } else {
@@ -70,8 +68,7 @@ const Timer = (props: IProps) => {
             "¡TERMINASTE TUS CICLOS DE ESTUDIO!");
         }
         minutes = studyTime;
-        // fullSeconds = minutes * 60;
-        fullSeconds = 3;
+        fullSeconds = minutes * 60;
         breakMinutes = breakTime;
         initializeInterval("study");
       }
