@@ -3,6 +3,7 @@ import Circle from "../../assets/svgs/Circle";
 import CircleFilled from "../../assets/svgs/CircleFilled";
 import alarm from "../../assets/sounds/alarm.mp3";
 import finish from "../../assets/sounds/finish.mp3";
+import Button from "./Button";
 
 interface IProps {
   studyTime: number;
@@ -27,6 +28,7 @@ const Timer = (props: IProps) => {
     setIsRunning,
   } = props;
   const [completedReps, setCompletedReps] = useState(0);
+  const [intervalId, setIntervalId] = useState(0);
 
   useEffect(() => {
     if (isRunning) {
@@ -102,6 +104,7 @@ const Timer = (props: IProps) => {
         document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
       }
       intervalID = setInterval(startCountdown, 1000);
+      setIntervalId(intervalID);
     };
 
     initializeInterval("study");
@@ -111,7 +114,10 @@ const Timer = (props: IProps) => {
     setStudyTime(0);
     setBreakTime(0);
     setReps(0);
+    setCompletedReps(0);
     setIsRunning(false);
+    clearInterval(intervalId);
+    setIntervalId(0);
   };
 
   return (
@@ -135,9 +141,9 @@ const Timer = (props: IProps) => {
           );
         })}
       </div>
-      {/* <div class="flex justify-center mt-16">
-        <Button title="Cambiar tiempo" action={changeTime} />
-      </div> */}
+      <div class="flex justify-center mt-16">
+        <Button title="Elegir nuevos tiempos" action={changeTime} />
+      </div>
     </>
   );
 };
