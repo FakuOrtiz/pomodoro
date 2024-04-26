@@ -101,14 +101,14 @@ const Timer = (props: IProps) => {
       <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo" />
       <h4 class="text-xl text-center mt-5 mb-2">Ciclos</h4>
       <div id="reps" class="flex gap-1 justify-center">
-        {[...Array.from({ length: completedReps })].map((_, i) => {
+        {[...Array.from({ length: completedReps })].map(() => {
           return (
             <>
               <CircleFilled height={30} width={30} />
             </>
           );
         })}
-        {[...Array.from({ length: reps })].map((_, i) => {
+        {[...Array.from({ length: reps })].map(() => {
           return (
             <>
               <Circle height={30} width={30} />
