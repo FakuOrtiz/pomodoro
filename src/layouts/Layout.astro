@@ -28,8 +28,9 @@ const { title } = Astro.props;
     <!-- Google tag (gtag.js) -->
     <script
       async
-      src={`https://www.googletagmanager.com/gtag/js?id=G-DY4C3G29GJ`} />
-      <script
+      src={`https://www.googletagmanager.com/gtag/js?id=G-DY4C3G29GJ`}
+    ></script>
+    <script
       dangerouslySetInnerHTML={{
         __html: `
         window.dataLayer = window.dataLayer || [];
@@ -38,7 +39,7 @@ const { title } = Astro.props;
         gtag('config', 'G-DY4C3G29GJ');
       `
       }}
-    />
+    ></script>
     <title>{title}</title>
   </head>
   <body class="font-montse p-4 flex flex-col items-center transition">
