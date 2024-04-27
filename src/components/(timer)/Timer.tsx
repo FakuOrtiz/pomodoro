@@ -4,51 +4,57 @@ import CircleFilled from "../../assets/svgs/CircleFilled";
 import alarm from "../../assets/sounds/alarm.mp3";
 import finish from "../../assets/sounds/finish.mp3";
 import Button from "./Button";
+import { useStore } from "@nanostores/preact";
+import { breakTime, cycles, isRunning, setBreakTime, setCycles, setIsRunning, setStudyTime, studyTime } from "../../store";
 
 interface IProps {
-  studyTime: number;
-  breakTime: number;
-  reps: number;
-  isRunning: boolean;
+  // studyTime: number;
+  // breakTime: number;
+  // reps: number;
+  // isRunning: boolean;
   setReps: (r: number) => void;
   setStudyTime: (t: number) => void;
   setBreakTime: (t: number) => void;
   setIsRunning: (b: boolean) => void;
 }
 
-const Timer = (props: IProps) => {
-  const {
-    studyTime,
-    breakTime,
-    reps,
-    isRunning,
-    setReps,
-    setStudyTime,
-    setBreakTime,
-    setIsRunning,
-  } = props;
+const Timer = () => {
+  const $studyTime = useStore(studyTime);
+  const $breakTime = useStore(breakTime);
+  const $cycles = useStore(cycles);
+  const $isRunning = useStore(isRunning);
+  // const {
+  //   studyTime,
+  //   breakTime,
+  //   reps,
+  //   isRunning,
+  //   setReps,
+  //   setStudyTime,
+  //   setBreakTime,
+  //   setIsRunning,
+  // } = props;
   const [completedReps, setCompletedReps] = useState(0);
   const [intervalId, setIntervalId] = useState(0);
 
   useEffect(() => {
-    if (isRunning) {
+    if ($isRunning) {
       countdown();
     }
-  }, [isRunning]);
+  }, [$isRunning]);
 
   const countdown = () => {
     const initialTimer =
-      studyTime.toString().length === 1
-        ? `0${studyTime}:00`
-        : `${studyTime}:00`;
+    $studyTime.toString().length === 1
+        ? `0${$studyTime}:00`
+        : `${$studyTime}:00`;
 
     document.getElementById("timer")!.innerHTML = initialTimer;
     document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
 
-    let minutes: string | number = studyTime;
+    let minutes: string | number = $studyTime;
     let fullSeconds = minutes * 60;
-    let breakMinutes: string | number = breakTime;
-    let repetitions = reps;
+    let breakMinutes: string | number = $breakTime;
+    let repetitions = $cycles;
 
     const startCountdown = () => {
       minutes = Math.floor(fullSeconds / 60);
@@ -75,22 +81,22 @@ const Timer = (props: IProps) => {
 
     const endCountdown = () => {
       if (breakMinutes) {
-        minutes = breakTime;
+        minutes = $breakTime;
         fullSeconds = minutes * 60;
         breakMinutes = 0;
         initializeInterval("break");
       } else {
         repetitions--;
-        setCompletedReps(reps - repetitions);
-        setReps(repetitions);
+        setCompletedReps($cycles - repetitions);
+        setCycles(repetitions);
         if (repetitions === 0) {
           new Audio(finish).play();
           return (document.getElementById("timeOf")!.innerHTML =
             "¡TERMINASTE TUS CICLOS DE ESTUDIO!");
         }
-        minutes = studyTime;
+        minutes = $studyTime;
         fullSeconds = minutes * 60;
-        breakMinutes = breakTime;
+        breakMinutes = $breakTime;
         initializeInterval("study");
       }
     };
@@ -113,7 +119,7 @@ const Timer = (props: IProps) => {
   const changeTime = () => {
     setStudyTime(0);
     setBreakTime(0);
-    setReps(0);
+    setCycles(0);
     setCompletedReps(0);
     setIsRunning(false);
     clearInterval(intervalId);
@@ -133,7 +139,7 @@ const Timer = (props: IProps) => {
             </>
           );
         })}
-        {[...Array.from({ length: reps })].map(() => {
+        {[...Array.from({ length: $cycles })].map(() => {
           return (
             <>
               <Circle height={30} width={30} />
