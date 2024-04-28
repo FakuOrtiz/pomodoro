@@ -23,7 +23,10 @@ const Timer = () => {
   const $cycles = useStore(cycles);
   const $isRunning = useStore(isRunning);
   const $completedCycles = useStore(completedCycles);
-  let worker = new Worker("/src/services/timerWorker.ts", { type: "module" });
+  let worker = new Worker(
+    new URL("/src/services/timerWorker.ts", import.meta.url),
+    { type: "module" }
+  );
 
   useEffect(() => {
     if ($isRunning) {
