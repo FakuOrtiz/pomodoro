@@ -1,139 +1,111 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import Circle from "../../assets/svgs/Circle";
 import CircleFilled from "../../assets/svgs/CircleFilled";
+import Button from "./Button";
+import { useStore } from "@nanostores/preact";
+import {
+  breakTime,
+  clearStore,
+  completedCycles,
+  cycles,
+  isRunning,
+  setCompletedCycles,
+  setCycles,
+  studyTime,
+} from "../../store";
 import alarm from "../../assets/sounds/alarm.mp3";
 import finish from "../../assets/sounds/finish.mp3";
-import Button from "./Button";
+import confetti from "canvas-confetti";
 
-interface IProps {
-  studyTime: number;
-  breakTime: number;
-  reps: number;
-  isRunning: boolean;
-  setReps: (r: number) => void;
-  setStudyTime: (t: number) => void;
-  setBreakTime: (t: number) => void;
-  setIsRunning: (b: boolean) => void;
-}
-
-const Timer = (props: IProps) => {
-  const {
-    studyTime,
-    breakTime,
-    reps,
-    isRunning,
-    setReps,
-    setStudyTime,
-    setBreakTime,
-    setIsRunning,
-  } = props;
-  const [completedReps, setCompletedReps] = useState(0);
-  const [intervalId, setIntervalId] = useState(0);
+const Timer = () => {
+  const $studyTime = useStore(studyTime);
+  const $breakTime = useStore(breakTime);
+  const $cycles = useStore(cycles);
+  const $isRunning = useStore(isRunning);
+  const $completedCycles = useStore(completedCycles);
+  let worker = new Worker("/src/services/timerWorker.ts", { type: "module" });
 
   useEffect(() => {
-    if (isRunning) {
+    if ($isRunning) {
       countdown();
     }
-  }, [isRunning]);
+  }, [$isRunning]);
 
   const countdown = () => {
     const initialTimer =
-      studyTime.toString().length === 1
-        ? `0${studyTime}:00`
-        : `${studyTime}:00`;
+      $studyTime.toString().length === 1
+        ? `0${$studyTime}:00`
+        : `${$studyTime}:00`;
 
     document.getElementById("timer")!.innerHTML = initialTimer;
     document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
 
-    let minutes: string | number = studyTime;
-    let fullSeconds = minutes * 60;
-    let breakMinutes: string | number = breakTime;
-    let repetitions = reps;
+    worker.postMessage({
+      $studyTime,
+      $breakTime,
+      $cycles,
+    });
 
-    const startCountdown = () => {
-      minutes = Math.floor(fullSeconds / 60);
-      let seconds: string | number = fullSeconds % 60;
+    worker.onmessage = ({ data }) => {
+      const { type, minutesDisplay, secondsDisplay, repetitions } = data;
+      if (type === "display") {
+        document.getElementById(
+          "timer"
+        )!.innerHTML = `${minutesDisplay}:${secondsDisplay}`;
+      }
 
-      fullSeconds--;
+      if (type === "break_time") {
+        document.getElementById("timeOf")!.innerHTML = "TIEMPO DE DESCANSO";
+      }
 
-      if (minutes === 0 && seconds === 3) {
+      if (type === "study_time") {
+        document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
+      }
+
+      if (type === "finish") {
+        new Audio(finish).play();
+        document.getElementById("timer")!.innerHTML = "00:00";
+        document.getElementById("timeOf")!.innerHTML =
+          "¡TERMINASTE TUS CICLOS DE ESTUDIO!";
+        worker.terminate();
+        confetti({
+          particleCount: 200,
+          spread: 70,
+          gravity: 0.5,
+          ticks: 400,
+        });
+      }
+
+      if (type === "alarm") {
         new Audio(alarm).play();
       }
 
-      if (minutes === 0 && seconds === 0) {
-        clearInterval(intervalID);
-        endCountdown();
-      }
-
-      let minutesDisplay = minutes < 10 ? `0${minutes}` : minutes;
-      let secondsDisplay = seconds < 10 ? `0${seconds}` : seconds;
-
-      document.getElementById(
-        "timer"
-      )!.innerHTML = `${minutesDisplay}:${secondsDisplay}`;
-    };
-
-    const endCountdown = () => {
-      if (breakMinutes) {
-        minutes = breakTime;
-        fullSeconds = minutes * 60;
-        breakMinutes = 0;
-        initializeInterval("break");
-      } else {
-        repetitions--;
-        setCompletedReps(reps - repetitions);
-        setReps(repetitions);
-        if (repetitions === 0) {
-          new Audio(finish).play();
-          return (document.getElementById("timeOf")!.innerHTML =
-            "¡TERMINASTE TUS CICLOS DE ESTUDIO!");
-        }
-        minutes = studyTime;
-        fullSeconds = minutes * 60;
-        breakMinutes = breakTime;
-        initializeInterval("study");
+      if (type === "new_cycle") {
+        setCompletedCycles($cycles - repetitions);
+        setCycles(repetitions);
       }
     };
-
-    let intervalID = 0;
-
-    const initializeInterval = (time: "break" | "study") => {
-      if (time === "break") {
-        document.getElementById("timeOf")!.innerHTML = "TIEMPO DE DESCANSO";
-      } else {
-        document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
-      }
-      intervalID = setInterval(startCountdown, 1000);
-      setIntervalId(intervalID);
-    };
-
-    initializeInterval("study");
   };
 
   const changeTime = () => {
-    setStudyTime(0);
-    setBreakTime(0);
-    setReps(0);
-    setCompletedReps(0);
-    setIsRunning(false);
-    clearInterval(intervalId);
-    setIntervalId(0);
+    clearStore();
+    worker.terminate();
   };
 
   return (
-    <>
+    <article>
       <h4 id="timeOf" class="text-xl text-center mb-10" />
       <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo" />
       <h4 class="text-xl text-center mt-10 mb-2">Ciclos</h4>
       <div id="reps" class="flex gap-1 justify-center">
-        {[...Array.from({ length: completedReps })].map(() => {
+        {[...Array.from({ length: $completedCycles })].map(() => {
           return (
             <>
               <CircleFilled height={30} width={30} />
             </>
           );
         })}
-        {[...Array.from({ length: reps })].map(() => {
+        {[...Array.from({ length: $cycles })].map(() => {
           return (
             <>
               <Circle height={30} width={30} />
@@ -144,7 +116,7 @@ const Timer = (props: IProps) => {
       <div class="flex justify-center mt-16">
         <Button title="Elegir nuevos tiempos" action={changeTime} />
       </div>
-    </>
+    </article>
   );
 };
 
