@@ -5,13 +5,14 @@ import alarm from "../../assets/sounds/alarm.mp3";
 import finish from "../../assets/sounds/finish.mp3";
 import Button from "./Button";
 import { useStore } from "@nanostores/preact";
-import { breakTime, cycles, isRunning, setBreakTime, setCycles, setIsRunning, setStudyTime, studyTime } from "../../store";
+import {
+  breakTime,
+  clearStore,
+  cycles,
+  isRunning, setCycles, studyTime
+} from "../../store";
 
 interface IProps {
-  // studyTime: number;
-  // breakTime: number;
-  // reps: number;
-  // isRunning: boolean;
   setReps: (r: number) => void;
   setStudyTime: (t: number) => void;
   setBreakTime: (t: number) => void;
@@ -23,16 +24,6 @@ const Timer = () => {
   const $breakTime = useStore(breakTime);
   const $cycles = useStore(cycles);
   const $isRunning = useStore(isRunning);
-  // const {
-  //   studyTime,
-  //   breakTime,
-  //   reps,
-  //   isRunning,
-  //   setReps,
-  //   setStudyTime,
-  //   setBreakTime,
-  //   setIsRunning,
-  // } = props;
   const [completedReps, setCompletedReps] = useState(0);
   const [intervalId, setIntervalId] = useState(0);
 
@@ -44,7 +35,7 @@ const Timer = () => {
 
   const countdown = () => {
     const initialTimer =
-    $studyTime.toString().length === 1
+      $studyTime.toString().length === 1
         ? `0${$studyTime}:00`
         : `${$studyTime}:00`;
 
@@ -117,17 +108,14 @@ const Timer = () => {
   };
 
   const changeTime = () => {
-    setStudyTime(0);
-    setBreakTime(0);
-    setCycles(0);
-    setCompletedReps(0);
-    setIsRunning(false);
+    clearStore();
     clearInterval(intervalId);
+    setCompletedReps(0);
     setIntervalId(0);
   };
 
   return (
-    <>
+    <article>
       <h4 id="timeOf" class="text-xl text-center mb-10" />
       <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo" />
       <h4 class="text-xl text-center mt-10 mb-2">Ciclos</h4>
@@ -150,7 +138,7 @@ const Timer = () => {
       <div class="flex justify-center mt-16">
         <Button title="Elegir nuevos tiempos" action={changeTime} />
       </div>
-    </>
+    </article>
   );
 };
 
