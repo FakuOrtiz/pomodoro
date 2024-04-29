@@ -104,7 +104,7 @@ const Timer = () => {
     <article>
       <audio preload="auto" id="alarm_audio" src={alarm} />
       <audio preload="auto" id="finish_audio" src={finish} />
-      <h4 id="time_to" class="text-xl text-center mb-4" />
+      <h2 id="time_to" class="text-xl text-center mb-4" />
       <p class="text-center text-xl">
         {timeTo === "study" && "📚 📖 ✏️"}
         {timeTo === "break" && "☕ 🧉 🌿"}
