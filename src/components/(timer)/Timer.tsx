@@ -14,6 +14,8 @@ import {
   setCycles,
   studyTime,
 } from "../../store";
+import alarm from "../../assets/sounds/alarm.mp3";
+import finish from "../../assets/sounds/finish.mp3";
 
 const Timer = () => {
   const $studyTime = useStore(studyTime);
@@ -97,8 +99,8 @@ const Timer = () => {
 
   return (
     <article>
-      <audio preload="auto" id="alarm" src={"/src/assets/sounds/alarm.mp3"}  />
-      <audio preload="auto" id="finish" src={"/src/assets/sounds/finish.mp3"} />
+      <audio preload="auto" id="alarm" src={alarm} />
+      <audio preload="auto" id="finish" src={finish} />
       <h4 id="timeOf" class="text-xl text-center mb-10" />
       <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo" />
       <h4 class="text-xl text-center mt-10 mb-2">Ciclos</h4>
