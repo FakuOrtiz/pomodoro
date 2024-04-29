@@ -52,22 +52,43 @@ const Timer = () => {
     worker.onmessage = ({ data }) => {
       const { type, minutesDisplay, secondsDisplay, repetitions } = data;
       if (type === "display") {
-        document.getElementById(
-          "timer"
-        )!.innerHTML = `${minutesDisplay}:${secondsDisplay}`;
+        const el = document.getElementById("timer");
+        if (el) {
+          el.innerHTML = `${minutesDisplay}:${secondsDisplay}`;
+        } else {
+          worker.terminate();
+          return;
+        }
       }
 
       if (type === "break_time") {
-        document.getElementById("timeOf")!.innerHTML = "TIEMPO DE DESCANSO";
+        const el = document.getElementById("timeOf");
+        if (el) {
+          el.innerHTML = "TIEMPO DE DESCANSO";
+        } else {
+          worker.terminate();
+          return;
+        }
       }
 
       if (type === "study_time") {
-        document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
+        const el = document.getElementById("timeOf");
+        if (el) {
+          el.innerHTML = "TIEMPO DE ESTUDIO";
+        } else {
+          worker.terminate();
+          return;
+        }
       }
 
       if (type === "finish") {
         const audio = document.getElementById("finish") as HTMLAudioElement;
-        audio.play();
+        if (audio) {
+          audio.play();
+        } else {
+          worker.terminate();
+          return;
+        }
         document.getElementById("timer")!.innerHTML = "00:00";
         document.getElementById("timeOf")!.innerHTML =
           "¡TERMINASTE TUS CICLOS DE ESTUDIO!";
@@ -82,7 +103,12 @@ const Timer = () => {
 
       if (type === "alarm") {
         const audio = document.getElementById("alarm") as HTMLAudioElement;
-        audio.play();
+        if (audio) {
+          audio.play();
+        } else {
+          worker.terminate();
+          return;
+        }
       }
 
       if (type === "new_cycle") {
