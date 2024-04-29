@@ -58,7 +58,7 @@ self.addEventListener("message", ({ data }: IProps) => {
 
   const initializeInterval = (time: "break" | "study") => {
     if (time === "break") self.postMessage({ type: "break_time" });
-    else self.postMessage({ type: "study_time" });
+    if (time === "study") self.postMessage({ type: "study_time" });
 
     intervalID = setInterval(startCountdown, 1000);
   };

@@ -1,4 +1,4 @@
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { useStore } from "@nanostores/preact";
 import confetti from "canvas-confetti";
 import Circle from "../../assets/svgs/Circle";
@@ -16,6 +16,7 @@ import {
 } from "../../store";
 import alarm from "../../assets/sounds/alarm.mp3";
 import finish from "../../assets/sounds/finish.mp3";
+import { playAudio, updateDisplay } from "./utils/timerUtils";
 
 const Timer = () => {
   const $studyTime = useStore(studyTime);
@@ -23,8 +24,10 @@ const Timer = () => {
   const $cycles = useStore(cycles);
   const $isRunning = useStore(isRunning);
   const $completedCycles = useStore(completedCycles);
+  const [timeTo, setTimeTo] = useState("study");
+
   let worker = new Worker(
-    new URL("/src/services/timerWorker.ts", import.meta.url),
+    new URL("./services/timerWorker.ts", import.meta.url),
     { type: "module" }
   );
 
@@ -41,7 +44,8 @@ const Timer = () => {
         : `${$studyTime}:00`;
 
     document.getElementById("timer")!.innerHTML = initialTimer;
-    document.getElementById("timeOf")!.innerHTML = "TIEMPO DE ESTUDIO";
+    document.getElementById("time_to")!.innerHTML = "TIEMPO DE ESTUDIO";
+    setTimeTo("study");
 
     worker.postMessage({
       $studyTime,
@@ -51,47 +55,26 @@ const Timer = () => {
 
     worker.onmessage = ({ data }) => {
       const { type, minutesDisplay, secondsDisplay, repetitions } = data;
+
       if (type === "display") {
-        const el = document.getElementById("timer");
-        if (el) {
-          el.innerHTML = `${minutesDisplay}:${secondsDisplay}`;
-        } else {
-          worker.terminate();
-          return;
-        }
+        updateDisplay("timer", `${minutesDisplay}:${secondsDisplay}`, worker);
       }
 
       if (type === "break_time") {
-        const el = document.getElementById("timeOf");
-        if (el) {
-          el.innerHTML = "TIEMPO DE DESCANSO";
-        } else {
-          worker.terminate();
-          return;
-        }
+        updateDisplay("time_to", "TIEMPO DE DESCANSO", worker);
+        setTimeTo("break");
       }
 
       if (type === "study_time") {
-        const el = document.getElementById("timeOf");
-        if (el) {
-          el.innerHTML = "TIEMPO DE ESTUDIO";
-        } else {
-          worker.terminate();
-          return;
-        }
+        updateDisplay("time_to", "TIEMPO DE ESTUDIO", worker);
+        setTimeTo("study");
       }
 
       if (type === "finish") {
-        const audio = document.getElementById("finish") as HTMLAudioElement;
-        if (audio) {
-          audio.play();
-        } else {
-          worker.terminate();
-          return;
-        }
-        document.getElementById("timer")!.innerHTML = "00:00";
-        document.getElementById("timeOf")!.innerHTML =
-          "¡TERMINASTE TUS CICLOS DE ESTUDIO!";
+        playAudio("finish_audio", worker);
+        updateDisplay("timer", "00:00", worker);
+        updateDisplay("time_to", "¡TERMINASTE TUS CICLOS DE ESTUDIO!", worker);
+        setTimeTo("finish");
         worker.terminate();
         confetti({
           particleCount: 200,
@@ -102,13 +85,7 @@ const Timer = () => {
       }
 
       if (type === "alarm") {
-        const audio = document.getElementById("alarm") as HTMLAudioElement;
-        if (audio) {
-          audio.play();
-        } else {
-          worker.terminate();
-          return;
-        }
+        playAudio("alarm_audio", worker);
       }
 
       if (type === "new_cycle") {
@@ -125,11 +102,18 @@ const Timer = () => {
 
   return (
     <article>
-      <audio preload="auto" id="alarm" src={alarm} />
-      <audio preload="auto" id="finish" src={finish} />
-      <h4 id="timeOf" class="text-xl text-center mb-10" />
-      <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo" />
-      <h4 class="text-xl text-center mt-10 mb-2">Ciclos</h4>
+      <audio preload="auto" id="alarm_audio" src={alarm} />
+      <audio preload="auto" id="finish_audio" src={finish} />
+      <h4 id="time_to" class="text-xl text-center mb-4" />
+      <p class="text-center text-xl">
+        {timeTo === "study" && "📚 📖 ✏️"}
+        {timeTo === "break" && "☕ 🧉 🌿"}
+        {timeTo === "finish" && "🎉 ✨ 🎊"}
+      </p>
+      <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo my-10" />
+      <h4 class="text-xl text-center mb-2">
+        Ciclos completados ({$completedCycles} de {$cycles + $completedCycles})
+      </h4>
       <div id="reps" class="flex gap-1 justify-center">
         {[...Array.from({ length: $completedCycles })].map(() => {
           return (
