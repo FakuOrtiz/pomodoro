@@ -1,8 +1,9 @@
 import { useEffect } from "preact/hooks";
+import { useStore } from "@nanostores/preact";
+import confetti from "canvas-confetti";
 import Circle from "../../assets/svgs/Circle";
 import CircleFilled from "../../assets/svgs/CircleFilled";
 import Button from "./Button";
-import { useStore } from "@nanostores/preact";
 import {
   breakTime,
   clearStore,
@@ -13,9 +14,6 @@ import {
   setCycles,
   studyTime,
 } from "../../store";
-import alarm from "../../assets/sounds/alarm.mp3";
-import finish from "../../assets/sounds/finish.mp3";
-import confetti from "canvas-confetti";
 
 const Timer = () => {
   const $studyTime = useStore(studyTime);
@@ -66,7 +64,8 @@ const Timer = () => {
       }
 
       if (type === "finish") {
-        new Audio(finish).play();
+        const audio = document.getElementById("finish") as HTMLAudioElement;
+        audio.play();
         document.getElementById("timer")!.innerHTML = "00:00";
         document.getElementById("timeOf")!.innerHTML =
           "¡TERMINASTE TUS CICLOS DE ESTUDIO!";
@@ -80,7 +79,8 @@ const Timer = () => {
       }
 
       if (type === "alarm") {
-        new Audio(alarm).play();
+        const audio = document.getElementById("alarm") as HTMLAudioElement;
+        audio.play();
       }
 
       if (type === "new_cycle") {
@@ -97,6 +97,8 @@ const Timer = () => {
 
   return (
     <article>
+      <audio preload="auto" id="alarm" src={"/src/assets/sounds/alarm.mp3"}  />
+      <audio preload="auto" id="finish" src={"/src/assets/sounds/finish.mp3"} />
       <h4 id="timeOf" class="text-xl text-center mb-10" />
       <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo" />
       <h4 class="text-xl text-center mt-10 mb-2">Ciclos</h4>
