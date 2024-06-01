@@ -3,7 +3,7 @@ import Button from "./Timer/Button";
 
 const getPhrase = async () => {
   try {
-    const resp = await fetch("/phrases");
+    const resp = await fetch("/phrases", { cache: "no-store" });
 
     return resp.json();
   } catch (error) {
