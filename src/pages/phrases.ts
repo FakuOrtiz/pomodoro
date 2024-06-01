@@ -8,7 +8,7 @@ export async function GET() {
   headers.append("Pragma", "no-cache");
   headers.append("Expires", "0");
 
-  return new Response(JSON.stringify(phrase));
+  return new Response(JSON.stringify(phrase), { headers });
 }
 
 const phrases = [
