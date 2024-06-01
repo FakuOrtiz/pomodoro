@@ -1,7 +1,7 @@
 interface IProps {
   title: string;
   action: () => void;
-  styles: any;
+  styles?: any;
 }
 
 const Button = (props: IProps) => {
