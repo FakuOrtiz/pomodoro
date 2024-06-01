@@ -1,9 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import WrapperMinutes from "../components/(timer)/WrapperMinutes";
+import WrapperMinutes from "../components/Timer/WrapperMinutes";
+import DayPhrase from "../components/DayPhrase";
 ---
 
 <Layout title="Chill Pomodoro App | Controla tus tiempos de estudio">
   <h1 class="text-4xl font-semibold text-center select-none">POMODORO</h1>
   <WrapperMinutes client:visible />
+  <DayPhrase client:load />
 </Layout>
