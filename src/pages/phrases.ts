@@ -3,6 +3,11 @@ export async function GET() {
 
   const phrase = phrases[index];
 
+  const headers = new Headers();
+  headers.append("Cache-Control", "no-cache, no-store, must-revalidate");
+  headers.append("Pragma", "no-cache");
+  headers.append("Expires", "0");
+
   return new Response(JSON.stringify(phrase));
 }
 
