@@ -9,8 +9,8 @@ import {
   setStudyTime,
   studyTime,
 } from "../../store";
-import MinuteSelector from "./MinuteSelector";
-import Timer from "./Timer";
+import MinuteSelector from "./MinuteSelector.tsx";
+import Timer from "./Timer.tsx";
 
 const WrapperMinutes = () => {
   const $studyTime = useStore(studyTime);

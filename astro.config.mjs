@@ -4,7 +4,7 @@ import preact from "@astrojs/preact";
 
 export default defineConfig({
   integrations: [tailwind(), preact()],
-  optimizeDeps: {
-    exclude: ["js-big-decimal"],
-  },
+  // optimizeDeps: {
+  //   exclude: ["js-big-decimal"],
+  // },
 });

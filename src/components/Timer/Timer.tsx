@@ -3,7 +3,7 @@ import { useStore } from "@nanostores/preact";
 import confetti from "canvas-confetti";
 import Circle from "../../assets/svgs/Circle";
 import CircleFilled from "../../assets/svgs/CircleFilled";
-import Button from "./Button";
+import Button from "./Button.tsx";
 import {
   breakTime,
   clearStore,
@@ -110,7 +110,10 @@ const Timer = () => {
         {timeTo === "break" && "☕ 🧉 🌿"}
         {timeTo === "finish" && "🎉 ✨ 🎊"}
       </p>
-      <h3 id="timer" class="text-8xl sm:text-9xl text-center font-chivo my-10" />
+      <h3
+        id="timer"
+        class="text-8xl sm:text-9xl text-center font-chivo my-10"
+      />
       <h4 class="text-xl text-center mb-2">
         Ciclos completados ({$completedCycles} de {$cycles + $completedCycles})
       </h4>
